@@ -1,0 +1,52 @@
+36BF0	3BFFF	5410	21520	21
+3BF60-3BF65	ROM->font->(char*6)
+3BF90	ROM->font->chunks[0]
+3BF98	ROM->font->chunks[1]
+7BD00	7BFFF	300		768		(gb2312 sec01)
+9BF20	9BFFF	E0		224
+BB400	BBFFF	C00		3072	(gb2312 sec02-09)
+DAF00	DAFFF	100		256		ROM->anti_piracy(LEN=0x3C)
+DE920	DEFFF	6E0		1760	(gb2312 sec05-07)
+F2F80	FAFFF	8080	32896	32
+FAFE0(C0DEBA5E)					ROM->magic(int)
+#define ROM             ((struct rom *)0x1FEFE0)
+
+gb2312	hi:0xa1-0xf7		lo:0xa1-0xfe
+-a0		-->0x01-0x57(87)	-->0x01-0x5e(94)
+
+//=addr-0x4000（通过usb刷机的ROM地址转换为机器读取地址需减去0x4000）
+n	addr			offset0		regn			offset1			begin	end		phyads	phyade
+00	80 6F 0F 00		0F6F80		E6 0F 00 00 	0FE6	4070	f6f80	fefd8	f2f80	fafd8
+01	F0 AB 03 00		03ABF0		82 05 00 00 	0582	1410	3abf0	3ff08	36bf0	3bf08
+02	70 FD 0B 00		0BFD70		F2 02 00 00 	02F2	754		bfd70	c11e8	bbd70	bd1e8
+03	20 FC 0B 00		0BFC20		B6 02 00 00 	02B6	694		bfc20	bfdf8	bbc20	bbdf8
+04	20 FF 09 00		09FF20		92 02 00 00 	0292	658		9ff20	a0038	9bf20	9c038
+05	F0 2E 0E 00		0E2EF0		64 02 00 00 	0264	612		e2ef0	e3058	deef0	df058
+06	E0 2D 0E 00		0E2DE0		34 02 00 00 	0234	564		e2de0	e2f58	dede0	def58
+07	20 29 0E 00		0E2920		78 01 00 00 	0178	376		e2920	e2ef8	de920	deef8
+08	00 F4 0B 00		0BF400		6E 00 00 00 	006E	110		bf400	bfc48	bb400	bbc48
+09	00 FD 07 00		07FD00		00 00 00 00 	0000	0		7fd00	80068	7bd00	7c068
+
+//hp39gs usb rom（1MB）free space distribution
+phyads	phyade	len=e-s+8	sum=65424byte
+f2f80	fafd8	8060
+36bf0	3bf08	5320
+bbd70	bd1e8	1480
+bbc20	bbdf8	01e0
+9bf20	9c038	0120
+deef0	df058	0170
+dede0	def58	0180
+de920	deef8	05e0
+bb400	bbc48	0850
+7bd00	7c068	0370
+
+4070	/		/		|	/		/		|	/		/		|	/		/
+1410	15,00	/		|	16 01	44 28	|	10 01	/		|	B0,A1	CC,BC
+754		08,02	14,93	|	09 03	15 94	|	09 03	0F 5E	|	A9,A3	AF,FE
+694		07,36	08,01	|	08 37	09 02	|	08 25	09 02	|	A8,C5	A9,A2
+658		07,00	07,35	|	08 01	08 36	|	08 01	08 24	|	A8,A1	A8,C4
+612		06,48	06,93	|	07 49	07 94	|	07 31	07 5E	|	A7,D1	A8,A0
+564		06,00	06,47	|	07 01	07 48	|	07 01	07 30	|	A7,A1	A7,D0
+376		04,00	05,93	|	05 01	06 94	|	05 01	06 5E	|	A5,A1	A7,A0
+110		01,16	03,93	|	02 17	04 94	|	02 11	04 5E	|	A2,B1	A5,A0
+0		00,00	01,15	|	01 01	02 16	|	01 01	02 10	|	A1,A1	A2,B0
